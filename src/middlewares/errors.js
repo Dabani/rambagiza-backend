@@ -19,7 +19,7 @@ export default (err, req, res, next) => {
 
     // Wrong Mongoose Object ID Error
     if (err.name === 'CastError') {
-      const message = 'RESOURCE_NOT_FOUND' + err.path
+      const message = `${req.t('RESOURCE_NOT_FOUND')}  ${err.path}`
       error = new ErrorHandler(message, 400)
     }
 
@@ -31,25 +31,25 @@ export default (err, req, res, next) => {
 
     // Handling Mongoose Duplicate Key errors
     if (err.code === 11000) {
-      const message = `DUPLICATE_KEY ${Object.keys(err.keyValue)}`
+      const message = `${req.t('DUPLICATE_KEY')} ${Object.keys(err.keyValue)}`
       error = new ErrorHandler(message, 400)
     }
 
     // Handling Wrong JWT error
     if (err.name === 'JsonWebTokenError') {
-      const message = 'JWT_EXPIRED'
+      const message = req.t('JWT_EXPIRED')
       error = new ErrorHandler(message, 400)
     }
 
     // Handling Expired JWT error
     if (err.name === 'TokenExpiredError') {
-      const message = 'JWT_INVALID'
+      const message = req.t('JWT_INVALID')
       error = new ErrorHandler(message, 400)
     }
 
     res.status(error.statusCode).json({
       success: false,
-      message: error.message || 'INTERNAL_SERVER_ERROR'
+      message: error.message || req.t('INTERNAL_SERVER_ERROR')
     })
   }
 }
