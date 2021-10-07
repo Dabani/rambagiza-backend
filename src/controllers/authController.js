@@ -33,42 +33,42 @@ export const registerUser = catchAsyncErrors(async (req, res, next) => {
   })
   */
   if (!username) {
-    return next(new ErrorHandler("USERNAME_EMPTY", 400))
+    return next(new ErrorHandler(req.t("USERNAME_EMPTY"), 400))
   }
 
   if (username.length < 5 || username.length > 20) {
-    return next(new ErrorHandler('USERNAME_LENGTH', 400))
+    return next(new ErrorHandler(req.t('USERNAME_LENGTH'), 400))
   }
 
   try {
     const uName = await User.findOne({ username })
     if (uName) {      
-      return next(new ErrorHandler('USER_NAME_IN_USE', 400))
+      return next(new ErrorHandler(req.t('USER_NAME_IN_USE'), 400))
     }    
   } catch (error) {
     console.log(error)
   }
 
   if (!email) {
-    return next(new ErrorHandler('EMAIL_INVALID', 400))
+    return next(new ErrorHandler(req.t('EMAIL_INVALID'), 400))
   }
 
   try {
     const uEmail = await User.findOne({ email })
     
     if (uEmail) {
-      return next(new ErrorHandler('EMAIL_IN_USE', 400))
+      return next(new ErrorHandler(req.t('EMAIL_IN_USE'), 400))
     }    
   } catch (error) {
     console.log(error)
   }
 
   if (!password) {
-    return next(new ErrorHandler('PASSWORD_EMPTY', 400))
+    return next(new ErrorHandler(req.t('PASSWORD_EMPTY'), 400))
   }
 
   if (password.length < 6) {
-    return next(new ErrorHandler('PASSWORD_LENGTH', 400))
+    return next(new ErrorHandler(req.t('PASSWORD_LENGTH'), 400))
   }
 
   const user = await User.create({
@@ -86,21 +86,21 @@ export const loginUser = catchAsyncErrors(async (req, res, next) => {
 
   // Checks if email and password is entered by user
   if (!email || !password) {
-    return next(new ErrorHandler('EMAIL_OR_PASSWORD_EMPTY', 400))
+    return next(new ErrorHandler(req.t('EMAIL_OR_PASSWORD_EMPTY'), 400))
   }
 
   // Finding user in database
   const user = await User.findOne({ email }).select('+password')
 
   if (!user) {
-    return next(new ErrorHandler('EMAIL_OR_PASSWORD_INVALID', 401))
+    return next(new ErrorHandler(req.t('EMAIL_OR_PASSWORD_INVALID'), 401))
   }
 
   // Checks if password is correct or not
   const isPasswordMatched = await user.comparePassword(password)
 
   if (!isPasswordMatched) {
-    return next(new ErrorHandler('PASSWORD_INVALID', 401))
+    return next(new ErrorHandler(req.t('PASSWORD_INVALID'), 401))
   }
 
   sendToken(user, 200, res)
@@ -112,7 +112,7 @@ export const forgotPassword = catchAsyncErrors(async (req, res, next) => {
   const user = await User.findOne({ email: req.body.email })
 
   if (!user) {
-    return next(new ErrorHandler('USER_NOT_FOUND', 404))
+    return next(new ErrorHandler(req.t('USER_NOT_FOUND'), 404))
   }
 
   // Get reset token
@@ -124,19 +124,19 @@ export const forgotPassword = catchAsyncErrors(async (req, res, next) => {
   /* const resetUrl = `${req.protocol}://${req.get('host')}/api/v1/password/reset/${resetToken}` */
   const resetUrl = `${ process.env.FRONTEND_URL }/password/reset/${ resetToken }`
 
-  const message = `PASSWORD_RESET_TOKEN\n\n${ resetUrl }\n\nREQUEST_IGNORE`
+  const message = `${ req.t('PASSWORD_RESET_TOKEN') }\n\n${ resetUrl }\n\n${ req.t('REQUEST_IGNORE')}`
 
   try {
 
     await sendEmail({
       email: user.email,
-      subject: 'PASSWORD_RECOVERY',
+      subject: `${ req.t('PASSWORD_RECOVERY')}`,
       message
     })
 
     res.status(200).json({
       success: true,
-      message: `EMAIL_SENT_TO ${ user.email }`
+      message: `${ req.t('EMAIL_SENT_TO')} ${ user.email }`
     })
 
   } catch (error) {
@@ -162,11 +162,11 @@ export const resetPassword = catchAsyncErrors(async (req, res, next) => {
   })
 
   if (!user) {
-    return next(new ErrorHandler('PASSWORD_RESET_TOKEN_INVALID', 400))
+    return next(new ErrorHandler(req.t('PASSWORD_RESET_TOKEN_INVALID'), 400))
   }
 
   if (req.body.password !== req.body.confirmPassword) {
-    return next(new ErrorHandler('PASSWORD_NOT_MATCH', 400))
+    return next(new ErrorHandler(req.t('PASSWORD_NOT_MATCH'), 400))
   }
 
   // Setup new password
@@ -198,7 +198,7 @@ export const updatePassword = catchAsyncErrors(async (req, res, next) => {
   const isMatched = await user.comparePassword(req.body.oldPassword)
 
   if (!isMatched) {
-    return next(new ErrorHandler('OLD_PASSWORD_INCORRECT'))
+    return next(new ErrorHandler(req.t('OLD_PASSWORD_INCORRECT')))
   }
 
   user.password = req.body.password
@@ -254,7 +254,7 @@ export const logout = catchAsyncErrors(async (req, res, next) => {
 
   res.status(200).json({
     success: true,
-    message: 'LOGGED_OUT'
+    message: req.t('LOGGED_OUT')
   })
 })
 
@@ -271,7 +271,7 @@ export const getUserDetails = catchAsyncErrors(async (req, res, next) => {
   const user = await User.findById(req.params.id)
 
   if (!user) {
-    return next(new ErrorHandler(`USER_NOT_FOUND_ID ${ req.params.id }`))
+    return next(new ErrorHandler(`${ req.t('USER_NOT_FOUND_ID')} ${ req.params.id }`))
   }
 
   res.status(200).json({
@@ -304,7 +304,7 @@ export const deleteUser = catchAsyncErrors(async (req, res, next) => {
   const user = await User.findById(req.params.id)
 
   if (!user) {
-    return next(new ErrorHandler(`USER_NOT_FOUND_ID ${ req.params.id }`))
+    return next(new ErrorHandler(`${req.t('USER_NOT_FOUND_ID')} ${ req.params.id }`))
   }
 
   // Remove avatar from cloudinary - TODO
