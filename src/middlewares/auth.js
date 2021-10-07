@@ -11,7 +11,7 @@ export const isAuthenticatedUser = catchAsyncErrors(async (req, res, next) => {
   const { token } = req.cookies
 
   if (!token) {
-    return next(new ErrorHandler('Login first to access this resource.', 401))
+    return next(new ErrorHandler(req.t('LOGIN_TO_ACCESS'), 401))
   }
 
   const decoded = verify(token, process.env.JWT_SECRET)
@@ -25,7 +25,7 @@ export function authorizeRoles(...roles) {
   return (req, res, next) => {
     if (!roles.includes(req.user.role)) {
       return next(
-        new ErrorHandler(`Role (${req.user.role}) is not allowed to access this resource.`, 403)
+        new ErrorHandler(`${req.t('ROLE')} (${ req.user.role}) ${req.t('ROLE_NOT_ALLOWED')}`, 403)
         )
     }
 
