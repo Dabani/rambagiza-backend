@@ -26,7 +26,7 @@ export default (err, req, res, next) => {
     // Handling Mongoose Validation Error
     if (err.name === 'ValidationError') {
       const message = Object.values(err.errors).map(value => value.message)
-      error = new ErrorHandler(message, 400)
+      error = new ErrorHandler(req.t(message), 400)
     }
 
     // Handling Mongoose Duplicate Key errors

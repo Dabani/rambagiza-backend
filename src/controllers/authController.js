@@ -20,7 +20,7 @@ export const registerUser = catchAsyncErrors(async (req, res, next) => {
   })
  */  
 
-  const { username, email, password } = req.body
+  const { username, email, password, confirmPassword } = req.body
   /* 
   const user = await User.create({
     username,
@@ -49,9 +49,10 @@ export const registerUser = catchAsyncErrors(async (req, res, next) => {
     console.log(error)
   }
 
-  if (!email) {
+  if (validEmail(email) !== true) {
     return next(new ErrorHandler(req.t('EMAIL_INVALID'), 400))
   }
+
 
   try {
     const uEmail = await User.findOne({ email })
@@ -67,8 +68,20 @@ export const registerUser = catchAsyncErrors(async (req, res, next) => {
     return next(new ErrorHandler(req.t('PASSWORD_EMPTY'), 400))
   }
 
-  if (password.length < 6) {
+  if (password.length < 8) {
     return next(new ErrorHandler(req.t('PASSWORD_LENGTH'), 400))
+  }
+
+  if (passwordStrength(password).value < 2) {
+    return next(new ErrorHandler(req.t('PASSWORD_WEAK'),401))
+  }
+
+  if (!confirmPassword) {
+    return next(new ErrorHandler(req.t('CONFIRM_PASSWORD_EMPTY'), 400))
+  }
+
+  if (req.body.password !== req.body.confirmPassword) {
+    return next(new ErrorHandler(req.t('PASSWORD_NOT_MATCH'), 400))
   }
 
   const user = await User.create({
@@ -241,7 +254,8 @@ export const updateProfile = catchAsyncErrors(async (req, res, next) => {
   })
 
   res.status(200).json({
-    success: true
+    success: true,
+    user
   })
 
 })
@@ -315,3 +329,20 @@ export const deleteUser = catchAsyncErrors(async (req, res, next) => {
     success: true
   })
 })
+
+const validEmail = (email) => {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+
+const passwordStrength = (password) => {
+  let strongPassword = new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})')
+  let mediumPassword = new RegExp('^((?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])(?=.{6,}))|((?=.*[a-z])(?=.*[A-Z])(?=.*[^A-Za-z0-9])(?=.{8,}))')
+  
+  if (strongPassword.test(password)) {
+    return { value: 3, message: 'Strong password', color: 'green' }
+  } else if (mediumPassword.test(password)) {
+    return { value: 2, message: 'Medium password', color: 'yellow' }
+  } else {
+    return { value: 1, message: 'Too weak password', color: 'red' }
+  }
+}
