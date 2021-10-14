@@ -1,3 +1,4 @@
+
 import User from '../models/user.js'
 
 import ErrorHandler from '../utils/errorHandler.js'
@@ -7,6 +8,13 @@ import sendEmail from '../utils/sendEmail.js'
 
 import crypto from 'crypto'
 import cloudinary from 'cloudinary'
+import { 
+  passwordStrength,
+  validEmail, 
+  validString, 
+  onlyLetters, 
+  isDate
+} from '../middlewares/validations.js'
 
 const { createHash} = crypto
 const { v2 } = cloudinary
@@ -38,6 +46,10 @@ export const registerUser = catchAsyncErrors(async (req, res, next) => {
 
   if (username.length < 5 || username.length > 20) {
     return next(new ErrorHandler(req.t('USERNAME_LENGTH'), 400))
+  }
+
+  if (validString(username) === true) {
+    return next(new ErrorHandler(req.t('USERNAME_INVALID'), 400))
   }
 
   try {
@@ -73,7 +85,7 @@ export const registerUser = catchAsyncErrors(async (req, res, next) => {
   }
 
   if (passwordStrength(password).value < 2) {
-    return next(new ErrorHandler(req.t('PASSWORD_WEAK'),401))
+    return next(new ErrorHandler(req.t('PASSWORD_WEAK'), 401))
   }
 
   if (!confirmPassword) {
@@ -149,6 +161,7 @@ export const forgotPassword = catchAsyncErrors(async (req, res, next) => {
 
     res.status(200).json({
       success: true,
+      title: req.t('EMAIL_PASSWORD_RECOVERY'),
       message: `${ req.t('EMAIL_SENT_TO')} ${ user.email }`
     })
 
@@ -178,6 +191,22 @@ export const resetPassword = catchAsyncErrors(async (req, res, next) => {
     return next(new ErrorHandler(req.t('PASSWORD_RESET_TOKEN_INVALID'), 400))
   }
 
+  if (!password) {
+    return next(new ErrorHandler(req.t('PASSWORD_EMPTY'), 400))
+  }
+
+  if (password.length < 8) {
+    return next(new ErrorHandler(req.t('PASSWORD_LENGTH'), 400))
+  }
+
+  if (passwordStrength(password).value < 2) {
+    return next(new ErrorHandler(req.t('PASSWORD_WEAK'), 401))
+  }
+
+  if (!confirmPassword) {
+    return next(new ErrorHandler(req.t('CONFIRM_PASSWORD_EMPTY'), 400))
+  }
+
   if (req.body.password !== req.body.confirmPassword) {
     return next(new ErrorHandler(req.t('PASSWORD_NOT_MATCH'), 400))
   }
@@ -199,6 +228,7 @@ export const getUserProfile = catchAsyncErrors(async (req, res, next) => {
 
   res.status(200).json({
     success: true,
+    title: req.t('USER_PROFILE'),
     user
   })
 
@@ -224,11 +254,85 @@ export const updatePassword = catchAsyncErrors(async (req, res, next) => {
 export const updateProfile = catchAsyncErrors(async (req, res, next) => {
   const newUserData = {
     username: req.body.username,
-    email: req.body.email
+    firstname: req.body.firstname,
+    lastname: req.body.lastname,
+    email: req.body.email,
+    role: req.body.role,
+    age: req.body.age,
+    gender: req.body.gender,
+    location: {},
+    avatar: {},
+    cover: {}
+  }
+
+  try {
+    const user = await User.findById(req.user.id)
+
+    if (!req.body.username || req.body.username ==='') {
+      user.username = req.user.username
+    } else if (req.user.username !== req.body.username) {
+      return next(new ErrorHandler(req.t('USERNAME_READ_ONLY'), 400))
+    } else {
+      user.username = req.body.username
+    }
+
+    if (!req.body.email || req.body.email === '') {
+      user.email = req.user.email
+    } else if (req.user.email !== req.body.email) {
+      return next(new ErrorHandler(req.t('EMAIL_READ_ONLY'), 400))
+    } else {
+      user.email = req.body.email
+    }
+
+    if (!req.body.role || req.body.role === '') {
+      user.role = req.user.role
+    } else if (req.user.role !== "admin" && req.user.role !== req.body.role) {
+      return next(new ErrorHandler(req.t('ROLE_CHANGE_NOT_ALLOWED'), 400))
+    } else {
+      user.role = req.body.role
+    }
+
+    if (!req.body.firstname || req.body.firstname === '') {
+      return next(new ErrorHandler(req.t('FIRSTNAME_EMPTY'), 400))
+    }
+
+    if (req.body.firstname.length < 2 || req.body.firstname.length > 20) {
+      return next(new ErrorHandler(req.t('FIRSTNAME_LENGTH'), 400))
+    }
+
+    if (!onlyLetters(req.body.firstname)) {
+      return next(new ErrorHandler(req.t('FIRSTNAME_STRING'), 400))
+    }
+
+    if (!req.body.lastname || req.body.firstname === '') {
+      return next(new ErrorHandler(req.t('LASTNAME_EMPTY'), 400))
+    }
+
+    if (req.body.lastname.length < 2 || req.body.lastname.length > 20) {
+      return next(new ErrorHandler(req.t('LASTNAME_LENGTH'), 400))
+    }
+
+    if (!onlyLetters(req.body.lastname)) {
+      return next(new ErrorHandler(req.t('LASTNAME_STRING'), 400))
+    }
+
+    if (!isDate(req.body.age)) {
+      return next(new ErrorHandler(req.t('INVALID_DATE'), 400))
+    }
+    
+  } catch (error) {
+    console.log(error)
+  }
+
+  newUserData.location = {
+    country: req.body.location.country, 
+    city: req.body.location.city,
+    state: req.body.location.state
   }
 
   // Update avatar
   if (req.body.avatar !== '') {
+/*
     const user = await User.findById(req.user.id)
 
     const image_id = user.avatar.public_id
@@ -239,12 +343,21 @@ export const updateProfile = catchAsyncErrors(async (req, res, next) => {
       width: 150,
       crop: 'scale'
     })
-
     newUserData.avatar = {
       public_id: result.public_id,
       url: result.secure_url
     }
+ */
+    newUserData.avatar = {
+      public_id: req.body.avatar.public_id
+    }
 
+    // Update cover
+    if (req.body.cover !== '') {
+      newUserData.cover = {
+        public_id: req.body.cover.public_id
+      }
+    }
   }
 
   const user = await User.findByIdAndUpdate(req.user.id, newUserData, {
@@ -255,6 +368,7 @@ export const updateProfile = catchAsyncErrors(async (req, res, next) => {
 
   res.status(200).json({
     success: true,
+    title: req.t('UPDATE_PROFILE'),
     user
   })
 
@@ -268,6 +382,7 @@ export const logout = catchAsyncErrors(async (req, res, next) => {
 
   res.status(200).json({
     success: true,
+    title: req.t('LOGGED_OUT'),
     message: req.t('LOGGED_OUT')
   })
 })
@@ -277,6 +392,7 @@ export const allUsers = catchAsyncErrors(async (req, res, next) => {
 
   res.status(200).json({
     success: true,
+    title: req.t('ALL_USERS'),
     users
   })
 })
@@ -290,6 +406,7 @@ export const getUserDetails = catchAsyncErrors(async (req, res, next) => {
 
   res.status(200).json({
     success: true,
+    title: req.t('USER_DETAILS'),
     user
   })
 })
@@ -309,6 +426,7 @@ export const updateUser = catchAsyncErrors(async (req, res, next) => {
 
   res.status(200).json({
     success: true,
+    title: req.t('UPDATE_USER'),
     user
   })
 
@@ -326,23 +444,7 @@ export const deleteUser = catchAsyncErrors(async (req, res, next) => {
   await user.remove()
 
   res.status(200).json({
-    success: true
+    success: true,
+    title: req.t('DELETE_USER')
   })
 })
-
-const validEmail = (email) => {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-}
-
-const passwordStrength = (password) => {
-  let strongPassword = new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})')
-  let mediumPassword = new RegExp('^((?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])(?=.{6,}))|((?=.*[a-z])(?=.*[A-Z])(?=.*[^A-Za-z0-9])(?=.{8,}))')
-  
-  if (strongPassword.test(password)) {
-    return { value: 3, message: 'Strong password', color: 'green' }
-  } else if (mediumPassword.test(password)) {
-    return { value: 2, message: 'Medium password', color: 'yellow' }
-  } else {
-    return { value: 1, message: 'Too weak password', color: 'red' }
-  }
-}

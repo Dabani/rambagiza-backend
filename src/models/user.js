@@ -14,28 +14,30 @@ const { randomBytes, createHash } = crypto
 const userSchema = new Schema({
   username: {
     type: String,
-    required: [true, 'Please enter your username'],
-    maxlength: [20, 'Your username cannot exceed 20 characters'],
-    minlength: [5, 'Username cannot be less than 5 characters']
+    required: [ true, 'Please enter your username' ],
+    maxlength: [ 20, 'Your username cannot exceed 20 characters' ],
+    minlength: [ 5, 'Username cannot be less than 5 characters' ]
   },
   firstname: {
     type: String,
-    maxlength: [ 20, 'Your firstname cannot exceed 20 characters' ]
+    maxlength: [ 20, 'Your firstname cannot exceed 20 characters' ],
+    minlength: [ 2, 'Your firstname must be longer than 2 characters' ]
   },
   lastname: {
     type: String,
-    maxlength: [ 20, 'Your lastname cannot exceed 20 characters' ]
+    maxlength: [ 20, 'Your lastname cannot exceed 20 characters' ],
+    minlength: [ 2, 'Your lastname must be longer than 2 characters' ]
   },
   email: {
     type: String,
-    required: [true, 'Please enter your email'],
+    required: [ true, 'Please enter your email' ],
     unique: true,
-    validate: [isEmail, 'Please enter valid email address']
+    validate: [ isEmail, 'Please enter valid email address' ]
   },
   password: {
     type: String,
-    required: [true, 'Please enter your password'],
-    minlength: [6, 'Your password must be longer than 6 characters'],
+    required: [ true, 'Please enter your password' ],
+    minlength: [ 8, 'Your password must be longer than 8 characters' ],
     select: false
   },
   avatar: {
@@ -58,7 +60,7 @@ const userSchema = new Schema({
       default: '/images/cover.jpg'
     }
   },
-  role:{
+  role: {
     type: String,
     default: 'user'
   },
@@ -83,45 +85,56 @@ const userSchema = new Schema({
     type: Date
   },
   gender: {
-    type: String
+    type: String,
+    enum: ['Female', 'Male']
   },
-  about: {    
-    ethnicity: {
-      type: String,
-      enum: ['Black', 'White', 'Asiatic', 'Arabic']
-    },
-    religion: {
-      type: String,
-      enum: ['Christian','Muslim','Hindou','Animist','Atheist']
-    },
-    'sex_orientation': {
-      type: String,
-      enum: ['Straight', 'Bisexual', 'Gay', 'Lesbian', 'Heterosexual', 'Homosexual', 'Pansexual', 'Asexual']
-    },
-    relationship: {
-      type: String,
-      enum: ['Family', 'Friendship', 'Romantic', 'Business','Work', 'Short-term', 'Marriage']
-    },
-    hobbies:[
-      {
-        name: {
-          type: String
-        }      
-      }
-    ],
-    favorites:[
-      {
-        diet: {
-          type:String,
-          enum: ['Vegetarian', 'Cannibal', 'Chinese', 'African', 'European', 'Indian', 'Arabic']
-        },
-        drinking:{
-          type: String,
-          enum: ['Soft drinks', 'Hard drinks', 'Energy drinks', 'Water']
-        }
-      }
-    ]    
+  ethnicity: {
+    type: String,
+    enum: [ 'Black', 'White', 'Asiatic', 'Arabic' ]
   },
+  religion: {
+    type: String,
+    enum: [ 'Christian', 'Muslim', 'Hindou', 'Animist', 'Atheist' ]
+  },
+  'sex_orientation': {
+    type: String,
+    enum: [ 'Straight', 'Bisexual', 'Gay', 'Lesbian', 'Heterosexual', 'Homosexual', 'Pansexual', 'Asexual' ]
+  },
+  relationship: {
+    type: String,
+    enum: [ 'Family', 'Friendship', 'Romantic', 'Business', 'Work', 'Short-term', 'Marriage' ]
+  },
+  hobbies: [
+    {
+      name: {
+        type: String
+      }
+    }
+  ],
+  favorites: [
+    {
+      diet: {
+        type: String,
+        enum: [ 'Vegetarian', 'Cannibal', 'Chinese', 'African', 'European', 'Indian', 'Arabic' ]
+      },
+      drinking: {
+        type: String,
+        enum: [ 'Soft drinks', 'Hard drinks', 'Energy drinks', 'Water' ]
+      }
+    }
+  ],
+  images: [
+    {
+      public_id: {
+        type: String,
+        required: true
+      },
+      url: {
+        type: String,
+        required: true
+      }
+    }
+  ],
   online: {
     type: Boolean,
     default: false
@@ -130,10 +143,10 @@ const userSchema = new Schema({
     type: Number,
     default: 3
   }
-},{timestamps: true})
+}, { timestamps: true })
 
 // Encrypting password before saving user
-userSchema.pre('save', async function(next) {
+userSchema.pre('save', async function (next) {
   if (!this.isModified('password')) {
     next()
   }
@@ -142,7 +155,7 @@ userSchema.pre('save', async function(next) {
 })
 
 // Compare user password
-userSchema.methods.comparePassword = async function(enteredPassword) {
+userSchema.methods.comparePassword = async function (enteredPassword) {
   return await compare(enteredPassword, this.password)
 }
 
