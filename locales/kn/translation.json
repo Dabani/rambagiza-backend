@@ -46,5 +46,10 @@
   "DELETE_USER": "Guhanagura umunyamuryango",
   "USER_DETAILS": "Amakuru yerekeye umunyamuryango",
   "ALL_USER": "Urutonde rw'abanyamuryango",
-  "INVALID_DATE": "Itariki ntiyemewe, itariki yemewe yandikwa mu buryo bukurikira : Ukwezi-umunsi-umwaka (urugero : 03/25/2005) !"
+  "INVALID_DATE": "Itariki ntiyemewe, itariki yemewe yandikwa mu buryo bukurikira : Ukwezi-umunsi-umwaka (urugero : 03/25/2005) !",
+  "HOBBY_EMPTY": "Wibagiwe kwandika izina ry'umwidagaduro !",
+  "HOBBY_LENGTH": "Izina ry'umwidagaduro ntirishobora kugira inyuguti ziri munsi y'eshatu, kandi ntizarenga 20 !",
+  "HOBBY_EXISTS": "Uyu mwidagaduro usanzwe uhari !",
+  "HOBBY_STRING": "Izina ry'umwidagaduro ntiryemera ibimenyetso, koresha inyuguti n'imibare gusa !",
+  "HOBBY_CREATED": "Umwidagaduro wakiriwe neza !"
 }

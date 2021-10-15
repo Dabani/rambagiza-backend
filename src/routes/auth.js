@@ -13,7 +13,10 @@ import {
   allUsers, 
   getUserDetails, 
   updateUser, 
-  deleteUser
+  deleteUser,
+  addHobbies,
+  getUserHobbies,
+  deleteHobby
 } from '../controllers/authController.js';
 
 import { 
@@ -38,5 +41,10 @@ router.route('/admin/user/:id')
   .get(isAuthenticatedUser, authorizeRoles('admin'), getUserDetails)
   .put(isAuthenticatedUser, authorizeRoles('admin'), updateUser)
   .delete(isAuthenticatedUser, authorizeRoles('admin'), deleteUser);
+
+router.route('/hobby').put(isAuthenticatedUser, addHobbies);
+router.route('/hobbies')
+  .get(isAuthenticatedUser, getUserHobbies)
+  .delete(isAuthenticatedUser, deleteHobby);
 
 export default router;

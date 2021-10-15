@@ -448,3 +448,76 @@ export const deleteUser = catchAsyncErrors(async (req, res, next) => {
     title: req.t('DELETE_USER')
   })
 })
+
+// Hobbies
+
+export const addHobbies = catchAsyncErrors(async (req, res, next) => {
+
+  const {
+    name
+  } = req.body
+
+  const hobby = {
+    user: req.user._id,
+    name
+  }
+
+  try {
+    const hUser = await User.findById(req.user._id)
+
+    if (!name || name === '') {
+      return next(new ErrorHandler(req.t('HOBBY_EMPTY'), 400))
+    }
+
+    if (name.length < 3 || name.length > 20) {
+      return next(new ErrorHandler(req.t('HOBBY_LENGTH'), 400))
+    }
+
+    if (validString(name) === true) {
+      return next(new ErrorHandler(req.t('HOBBY_STRING'), 400))
+    }
+
+    // check if hobby already exists  
+    if (hUser.hobbies.some(h => h.name === name)) {
+      return next(new ErrorHandler(req.t('HOBBY_EXISTS'), 400))
+    } else {
+      hUser.hobbies.push(hobby)
+    }
+
+    await hUser.save({ validateBeforeSave: false })
+
+    res.status(200).json({
+      success: true,
+      message: req.t('HOBBY_CREATED')
+    })
+  } catch (error) {
+    console.log(error)
+  }
+})
+
+export const getUserHobbies = catchAsyncErrors(async (req, res, next) => {
+  const user = await User.findById(req.query.id)
+
+  res.status(200).json({
+    success: true,
+    hobbies: user.hobbies
+  })
+})
+
+export const deleteHobby = catchAsyncErrors(async (req, res, next) => {
+  const user = await User.findById(req.query.userId)
+
+  const hobbies = user.hobbies.filter(hobby => hobby._id.toString() !== req.query.id.toString())
+
+  await User.findByIdAndUpdate(req.query.userId, {
+    hobbies
+  }, {
+    new: true,
+    runValidators: true,
+    useFindAndModify: false
+  })
+
+  res.status(200).json({
+    success: true
+  })
+})

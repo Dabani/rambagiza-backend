@@ -46,5 +46,10 @@
   "DELETE_USER": "Supprimer l'utilisateur",
   "USER_DETAILS": "Détails de l'utilisateur",
   "ALL_USER": "Liste des utilisateurs",
-  "INVALID_DATE": "Date invalide, format accepté : MM-jj-aaaa (ex : 03/25/2005) !"
+  "INVALID_DATE": "Date invalide, format accepté : MM-jj-aaaa (ex : 03/25/2005) !",
+  "HOBBY_EMPTY": "Le champ du nom de passe-temps est vide !",
+  "HOBBY_LENGTH": "Le nom du passe-temps ne peut pas comporter moins de 3 caractères et pas plus de 20 caractères !",
+  "HOBBY_EXISTS": "Ce passe-temps existe déjà !",
+  "HOBBY_STRING": "Le nom du passe-temps n'accepte pas les caractères spéciaux !",
+  "HOBBY_CREATED": "Passe-temps ajouté avec succès !"
 }

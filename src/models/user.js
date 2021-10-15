@@ -86,7 +86,7 @@ const userSchema = new Schema({
   },
   gender: {
     type: String,
-    enum: ['Female', 'Male']
+    enum: [ 'Female', 'Male' ]
   },
   ethnicity: {
     type: String,
@@ -106,6 +106,11 @@ const userSchema = new Schema({
   },
   hobbies: [
     {
+      user: {
+        type: Schema.ObjectId,
+        ref: 'User',
+        required: true
+      },
       name: {
         type: String
       }
@@ -113,6 +118,11 @@ const userSchema = new Schema({
   ],
   favorites: [
     {
+      user: {
+        type: Schema.ObjectId,
+        ref: 'User',
+        required: true
+      },
       diet: {
         type: String,
         enum: [ 'Vegetarian', 'Cannibal', 'Chinese', 'African', 'European', 'Indian', 'Arabic' ]
@@ -132,6 +142,18 @@ const userSchema = new Schema({
       url: {
         type: String,
         required: true
+      }
+    }
+  ],
+  likes: [
+    {
+      likeUser: {
+        type: Schema.ObjectId,
+        ref: 'User'
+      },
+      date: {
+        type: Date,
+        default: Date.now
       }
     }
   ],

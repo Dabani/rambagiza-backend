@@ -46,5 +46,10 @@
   "DELETE_USER": "Delete User",
   "USER_DETAILS": "User Details",
   "ALL_USER": "Users' List",
-  "INVALID_DATE": "Invalid date, accepted format: MM-dd-yyyy (e.g: 03/25/2005)!"
+  "INVALID_DATE": "Invalid date, accepted format: MM-dd-yyyy (e.g: 03/25/2005)!",
+  "HOBBY_EMPTY": "Hobby name field is empty!",
+  "HOBBY_LENGTH": "The hobby name cannot be less than 3 characters and not greater than 20 characters!",
+  "HOBBY_EXISTS": "That hobby already exists!",
+  "HOBBY_STRING": "The hobby name doesn't accept special characters!",
+  "HOBBY_CREATED": "Hobby added successfully!"
 }
