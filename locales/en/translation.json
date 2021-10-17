@@ -51,5 +51,6 @@
   "HOBBY_LENGTH": "The hobby name cannot be less than 3 characters and not greater than 20 characters!",
   "HOBBY_EXISTS": "That hobby already exists!",
   "HOBBY_STRING": "The hobby name doesn't accept special characters!",
-  "HOBBY_CREATED": "Hobby added successfully!"
+  "HOBBY_CREATED": "Hobby added successfully!",
+  "GENDER_UNKOWN": "Gender not recognized!"
 }

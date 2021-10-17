@@ -4,11 +4,14 @@ import bcryptjs from 'bcryptjs'
 import jsonwebtoken from 'jsonwebtoken'
 import crypto from 'crypto' /* Builtin library, nothing to install */
 
+import { Genders } from '../data/enums.js'
+
 const { Schema, model } = mongoose
 const { isEmail } = validator
 const { hash, compare } = bcryptjs
 const { sign } = jsonwebtoken
 const { randomBytes, createHash } = crypto
+
 
 
 const userSchema = new Schema({
@@ -86,7 +89,7 @@ const userSchema = new Schema({
   },
   gender: {
     type: String,
-    enum: [ 'Female', 'Male' ]
+    enum: Object.values(Genders)
   },
   ethnicity: {
     type: String,
@@ -202,5 +205,11 @@ userSchema.methods.getResetPasswordToken = function () {
   return resetToken
 
 }
+
+// Enumerations
+
+Object.assign(userSchema.statics, {
+  Genders,
+});
 
 export default model('User', userSchema)

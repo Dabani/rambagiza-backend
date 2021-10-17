@@ -51,5 +51,6 @@
   "HOBBY_LENGTH": "Izina ry'umwidagaduro ntirishobora kugira inyuguti ziri munsi y'eshatu, kandi ntizarenga 20 !",
   "HOBBY_EXISTS": "Uyu mwidagaduro usanzwe uhari !",
   "HOBBY_STRING": "Izina ry'umwidagaduro ntiryemera ibimenyetso, koresha inyuguti n'imibare gusa !",
-  "HOBBY_CREATED": "Umwidagaduro wakiriwe neza !"
+  "HOBBY_CREATED": "Umwidagaduro wakiriwe neza !",
+  "GENDER_UNKOWN": "Wanditse igitsina kitazwi !"
 }

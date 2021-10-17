@@ -51,5 +51,6 @@
   "HOBBY_LENGTH": "Le nom du passe-temps ne peut pas comporter moins de 3 caractères et pas plus de 20 caractères !",
   "HOBBY_EXISTS": "Ce passe-temps existe déjà !",
   "HOBBY_STRING": "Le nom du passe-temps n'accepte pas les caractères spéciaux !",
-  "HOBBY_CREATED": "Passe-temps ajouté avec succès !"
+  "HOBBY_CREATED": "Passe-temps ajouté avec succès !",
+  "GENDER_UNKOWN": "Sexe non reconnu !"
 }

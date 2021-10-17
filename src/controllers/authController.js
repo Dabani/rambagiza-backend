@@ -1,5 +1,6 @@
 
 import User from '../models/user.js'
+import { Genders } from '../data/enums.js'
 
 import ErrorHandler from '../utils/errorHandler.js'
 import catchAsyncErrors from '../middlewares/catchAsyncErrors.js'
@@ -318,6 +319,10 @@ export const updateProfile = catchAsyncErrors(async (req, res, next) => {
 
     if (!isDate(req.body.age)) {
       return next(new ErrorHandler(req.t('INVALID_DATE'), 400))
+    }
+
+    if (Object.values(Genders).indexOf(req.body.gender) === -1) {
+      return next(new ErrorHandler(req.t('GENDER_UNKNOWN'), 400))
     }
     
   } catch (error) {
