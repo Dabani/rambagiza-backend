@@ -4,7 +4,15 @@ import bcryptjs from 'bcryptjs'
 import jsonwebtoken from 'jsonwebtoken'
 import crypto from 'crypto' /* Builtin library, nothing to install */
 
-import { Genders } from '../data/enums.js'
+import { 
+  Genders,
+  Ethnies,
+  Religions,
+  Orientations,
+  Relationships,
+  Diets,
+  Drinks,
+ } from '../data/enums.js'
 
 const { Schema, model } = mongoose
 const { isEmail } = validator
@@ -93,19 +101,19 @@ const userSchema = new Schema({
   },
   ethnicity: {
     type: String,
-    enum: [ 'Black', 'White', 'Asiatic', 'Arabic' ]
+    enum: Object.values(Ethnies)
   },
   religion: {
     type: String,
-    enum: [ 'Christian', 'Muslim', 'Hindou', 'Animist', 'Atheist' ]
+    enum: Object.values(Religions)
   },
   'sex_orientation': {
     type: String,
-    enum: [ 'Straight', 'Bisexual', 'Gay', 'Lesbian', 'Heterosexual', 'Homosexual', 'Pansexual', 'Asexual' ]
+    enum: Object.values(Orientations)
   },
   relationship: {
     type: String,
-    enum: [ 'Family', 'Friendship', 'Romantic', 'Business', 'Work', 'Short-term', 'Marriage' ]
+    enum: Object.values(Relationships)
   },
   hobbies: [
     {
@@ -128,11 +136,11 @@ const userSchema = new Schema({
       },
       diet: {
         type: String,
-        enum: [ 'Vegetarian', 'Cannibal', 'Chinese', 'African', 'European', 'Indian', 'Arabic' ]
+        enum: Object.values(Diets)
       },
-      drinking: {
+      drink: {
         type: String,
-        enum: [ 'Soft drinks', 'Hard drinks', 'Energy drinks', 'Water' ]
+        enum: Object.values(Drinks)
       }
     }
   ],
@@ -207,9 +215,14 @@ userSchema.methods.getResetPasswordToken = function () {
 }
 
 // Enumerations
-
 Object.assign(userSchema.statics, {
   Genders,
+  Ethnies,
+  Religions,
+  Orientations,
+  Relationships,
+  Diets,
+  Drinks,
 });
 
 export default model('User', userSchema)

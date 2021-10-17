@@ -52,5 +52,5 @@
   "HOBBY_EXISTS": "Ce passe-temps existe déjà !",
   "HOBBY_STRING": "Le nom du passe-temps n'accepte pas les caractères spéciaux !",
   "HOBBY_CREATED": "Passe-temps ajouté avec succès !",
-  "GENDER_UNKOWN": "Sexe non reconnu !"
+  "GENDER_UNKNOWN": "Sexe non reconnu !"
 }

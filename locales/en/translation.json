@@ -52,5 +52,5 @@
   "HOBBY_EXISTS": "That hobby already exists!",
   "HOBBY_STRING": "The hobby name doesn't accept special characters!",
   "HOBBY_CREATED": "Hobby added successfully!",
-  "GENDER_UNKOWN": "Gender not recognized!"
+  "GENDER_UNKNOWN": "Gender not recognized!"
 }
