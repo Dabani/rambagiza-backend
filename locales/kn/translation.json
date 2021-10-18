@@ -52,5 +52,12 @@
   "HOBBY_EXISTS": "Uyu mwidagaduro usanzwe uhari !",
   "HOBBY_STRING": "Izina ry'umwidagaduro ntiryemera ibimenyetso, koresha inyuguti n'imibare gusa !",
   "HOBBY_CREATED": "Umwidagaduro wakiriwe neza !",
+  "HOBBY_DELETED": "Umwidagaduro wahanaguwe nta ngorane !",
+  "FAVORITE_EMPTY": "Wibagiwe kuzuza ibyo ukunda !",
+  "DIET_UNKNOWN": "Indyo itazwi !",
+  "DRINK_UNKNOWN": "Ibinyobwa bitazwi !",
+  "FAVORITE_EXISTS": "Uru rusobe rw'ibyo ukunda rusanzwe ruhari !",
+  "FAVORITE_CREATED": "Ibyo ukunda byemewe !",
+  "FAVORITE_DELETED": "Ibyo ukunda byahanaguwe nta ngorane !",
   "GENDER_UNKNOWN": "Wanditse igitsina kitazwi !"
 }

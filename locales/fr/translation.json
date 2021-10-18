@@ -52,5 +52,12 @@
   "HOBBY_EXISTS": "Ce passe-temps existe déjà !",
   "HOBBY_STRING": "Le nom du passe-temps n'accepte pas les caractères spéciaux !",
   "HOBBY_CREATED": "Passe-temps ajouté avec succès !",
+  "HOBBY_DELETED": "Passe-temps supprimé avec succès !",
+  "FAVORITE_EMPTY": "L'objet favori est vide !",
+  "DIET_UNKNOWN": "Le régime alimentaire n'est pas reconnu !",
+  "DRINK_UNKNOWN": "La boisson n'est pas reconnue !",
+  "FAVORITE_EXISTS": "Cette combinaison préférée existe déjà !",
+  "FAVORITE_CREATED": "Favori ajouté avec succès !",
+  "FAVORITE_DELETED": "Favori supprimé avec succès !",
   "GENDER_UNKNOWN": "Sexe non reconnu !"
 }

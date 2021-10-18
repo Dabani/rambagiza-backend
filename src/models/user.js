@@ -107,7 +107,7 @@ const userSchema = new Schema({
     type: String,
     enum: Object.values(Religions)
   },
-  'sex_orientation': {
+  'orientation': {
     type: String,
     enum: Object.values(Orientations)
   },

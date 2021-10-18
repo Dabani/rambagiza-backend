@@ -16,7 +16,10 @@ import {
   deleteUser,
   addHobbies,
   getUserHobbies,
-  deleteHobby
+  deleteHobby,
+  addFavorites,
+  getUserFavorites,
+  deleteFavorite
 } from '../controllers/authController.js';
 
 import { 
@@ -46,5 +49,10 @@ router.route('/hobby').put(isAuthenticatedUser, addHobbies);
 router.route('/hobbies')
   .get(isAuthenticatedUser, getUserHobbies)
   .delete(isAuthenticatedUser, deleteHobby);
+
+router.route('/favorite').put(isAuthenticatedUser, addFavorites);
+router.route('/favorites')
+  .get(isAuthenticatedUser, getUserFavorites)
+  .delete(isAuthenticatedUser, deleteFavorite);
 
 export default router;

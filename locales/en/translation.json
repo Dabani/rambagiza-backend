@@ -52,5 +52,12 @@
   "HOBBY_EXISTS": "That hobby already exists!",
   "HOBBY_STRING": "The hobby name doesn't accept special characters!",
   "HOBBY_CREATED": "Hobby added successfully!",
+  "HOBBY_DELETED": "Hobby deleted successfully!",
+  "FAVORITE_EMPTY": "Favorite object is empty!",
+  "DIET_UNKNOWN": "Diet not recognized!",
+  "DRINK_UNKNOWN": "Drink not recognized!",
+  "FAVORITE_EXISTS": "That favorite combination already exists!",
+  "FAVORITE_CREATED": "Favorite added successfully!",
+  "FAVORITE_DELETED": "Favorite deleted successfully!",
   "GENDER_UNKNOWN": "Gender not recognized!"
 }

@@ -1,6 +1,6 @@
 
 import User from '../models/user.js'
-import { Genders } from '../data/enums.js'
+import { Genders, Diets, Drinks } from '../data/enums.js'
 
 import ErrorHandler from '../utils/errorHandler.js'
 import catchAsyncErrors from '../middlewares/catchAsyncErrors.js'
@@ -455,7 +455,6 @@ export const deleteUser = catchAsyncErrors(async (req, res, next) => {
 })
 
 // Hobbies
-
 export const addHobbies = catchAsyncErrors(async (req, res, next) => {
 
   const {
@@ -499,7 +498,7 @@ export const addHobbies = catchAsyncErrors(async (req, res, next) => {
     console.log(error)
   }
 })
-
+// Get user hobbies : /hobbies?id={user._id}
 export const getUserHobbies = catchAsyncErrors(async (req, res, next) => {
   const user = await User.findById(req.query.id)
 
@@ -510,11 +509,11 @@ export const getUserHobbies = catchAsyncErrors(async (req, res, next) => {
 })
 
 export const deleteHobby = catchAsyncErrors(async (req, res, next) => {
-  const user = await User.findById(req.query.userId)
+  const user = await User.findById(req.query.user)
 
   const hobbies = user.hobbies.filter(hobby => hobby._id.toString() !== req.query.id.toString())
 
-  await User.findByIdAndUpdate(req.query.userId, {
+  await User.findByIdAndUpdate(req.query.user, {
     hobbies
   }, {
     new: true,
@@ -523,6 +522,85 @@ export const deleteHobby = catchAsyncErrors(async (req, res, next) => {
   })
 
   res.status(200).json({
-    success: true
+    success: true,
+    message: req.t('HOBBY_DELETED')
   })
 })
+
+// Favorites
+export const addFavorites = catchAsyncErrors(async (req, res, next) => {
+
+  const {
+    diet,
+    drink
+  } = req.body
+
+  const favorite = {
+    user: req.user._id,
+    diet,
+    drink
+  }
+
+  try {
+    const fUser = await User.findById(req.user._id)
+
+    if ((!diet || diet === '') && (!drink || drink === '')) {
+      return next(new ErrorHandler(req.t('FAVORITE_EMPTY'), 400))
+    }
+
+    // Check if diet is valid
+    if (Object.values(Diets).indexOf(diet) === -1) {
+      return next(new ErrorHandler(req.t('DIET_UNKNOWN'), 400))
+    }
+
+    // Check if drink is valid
+    if (Object.values(Drinks).indexOf(drink) === -1) {
+      return next(new ErrorHandler(req.t('DRINK_UNKNOWN'), 400))
+    }
+
+    // check if favorite already exists (the combination of diet and drink)
+    if (fUser.favorites.some(f => f.diet === diet) && fUser.favorites.some(f => f.drink === drink)) {
+      return next(new ErrorHandler(req.t('FAVORITE_EXISTS'), 400))
+    }
+
+    fUser.favorites.push(favorite)
+
+    await fUser.save({ validateBeforeSave: false })
+
+    res.status(200).json({
+      success: true,
+      message: req.t('FAVORITE_CREATED')
+    })
+  } catch (error) {
+    console.log(error)
+  }
+})
+// Get user favorites : /favorites?id={user._id}
+export const getUserFavorites = catchAsyncErrors(async (req, res, next) => {
+  const user = await User.findById(req.query.id)
+
+  res.status(200).json({
+    success: true,
+    favorites: user.favorites
+  })
+})
+
+export const deleteFavorite = catchAsyncErrors(async (req, res, next) => {
+  const user = await User.findById(req.query.user)
+
+  const favorites = user.favorites.filter(favorite => favorite._id.toString() !== req.query.id.toString())
+
+  await User.findByIdAndUpdate(req.query.user, {
+    favorites
+  }, {
+    new: true,
+    runValidators: true,
+    useFindAndModify: false
+  })
+
+  res.status(200).json({
+    success: true,
+    message: req.t('FAVORITE_DELETED')
+  })
+})
+
