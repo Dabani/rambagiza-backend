@@ -609,12 +609,13 @@ export const deleteFavorite = catchAsyncErrors(async (req, res, next) => {
 // Images
 export const uploadImages = catchAsyncErrors(async (req, res, next) => {
   try {
-    const { upload } = req.body
+    const { upload, allowComments } = req.body
     const newImage = {
       user: req.user._id,
       image: `https://rambagiza-online.s3.us-east-2.amazonaws.com/${ upload }`,
       date: new Date(),
       likes: [],
+      allowComments,
       comments:[]
     }
 
@@ -665,3 +666,44 @@ export const deleteImage = catchAsyncErrors(async (req, res, next) => {
   })
 })
 
+// Likes
+export const addLikes = catchAsyncErrors(async (req, res, next) => {
+  try {
+    const like = {
+      likeUser: req.user._id,
+      date: new Date()
+    }
+
+    const lUser = await User.findById({_id: req.params.id})
+
+    // check if like user already exists
+    if (lUser.likes.some(l => l.likeUser === req.user._id)) {
+      lUser.likes.filter(like => like._id.toString() !== req.query.id.toString())
+    } else {
+      lUser.likes.push(like)
+    }
+    
+    await lUser.save({ validateBeforeSave: false })
+
+    res.status(200).json({
+      success: true,
+      message: req.t('LIKE_CREATED')
+    })
+  } catch (error) {
+    console.log(error)
+  }
+})
+// Get user likes : /likes?id={user._id}
+export const getUserLikes = catchAsyncErrors(async (req, res, next) => {
+  try {
+    const user = await User.findById(req.query.id)
+
+    res.status(200).json({
+      success: true,
+      userLikes: user.likes,
+      numLikes: user.likes.length
+    })    
+  } catch (error) {
+    console.log(error)
+  }
+})

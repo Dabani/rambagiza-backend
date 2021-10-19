@@ -4,7 +4,7 @@ import bcryptjs from 'bcryptjs'
 import jsonwebtoken from 'jsonwebtoken'
 import crypto from 'crypto' /* Builtin library, nothing to install */
 
-import { 
+import {
   Genders,
   Ethnies,
   Religions,
@@ -12,7 +12,7 @@ import {
   Relationships,
   Diets,
   Drinks,
- } from '../data/enums.js'
+} from '../data/enums.js'
 
 const { Schema, model } = mongoose
 const { isEmail } = validator
@@ -161,6 +161,9 @@ const userSchema = new Schema({
       },
       likes: [
         {
+          imageId: {
+            type: String
+          },
           likeUser: {
             type: Schema.ObjectId,
             ref: 'User'
@@ -171,8 +174,15 @@ const userSchema = new Schema({
           }
         }
       ],
+      allowComments: {
+        type: Boolean,
+        default: false
+      },
       comments: [
         {
+          imageId: {
+            type: String
+          },
           commentUser: {
             type: Schema.ObjectId,
             ref: 'User'
@@ -197,6 +207,19 @@ const userSchema = new Schema({
       date: {
         type: Date,
         default: Date.now
+      }
+    }
+  ],
+  friends: [
+    {
+      friend: {
+        type: Schema.ObjectId,
+        ref: 'User',
+        unique: true
+      },
+      isFriend: {
+        type: Boolean,
+        default: false
       }
     }
   ],
