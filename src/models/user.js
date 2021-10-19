@@ -146,14 +146,46 @@ const userSchema = new Schema({
   ],
   images: [
     {
-      public_id: {
+      user: {
+        type: Schema.ObjectId,
+        ref: 'User',
+        required: true
+      },
+      image: {
         type: String,
         required: true
       },
-      url: {
-        type: String,
-        required: true
-      }
+      date: {
+        type: Date,
+        default: Date.now
+      },
+      likes: [
+        {
+          likeUser: {
+            type: Schema.ObjectId,
+            ref: 'User'
+          },
+          date: {
+            type: Date,
+            default: Date.now
+          }
+        }
+      ],
+      comments: [
+        {
+          commentUser: {
+            type: Schema.ObjectId,
+            ref: 'User'
+          },
+          comment: {
+            type: String
+          },
+          date: {
+            type: Date,
+            default: Date.now
+          }
+        }
+      ]
     }
   ],
   likes: [

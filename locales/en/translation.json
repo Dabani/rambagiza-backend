@@ -59,5 +59,8 @@
   "FAVORITE_EXISTS": "That favorite combination already exists!",
   "FAVORITE_CREATED": "Favorite added successfully!",
   "FAVORITE_DELETED": "Favorite deleted successfully!",
-  "GENDER_UNKNOWN": "Gender not recognized!"
+  "GENDER_UNKNOWN": "Gender not recognized!",
+  "IMAGE_EMPTY": "There is no image to upload!",
+  "IMAGE_UPLOADED": "Image uploaded successfully!",
+  "IMAGE_DELETED": "Image deleted!"
 }

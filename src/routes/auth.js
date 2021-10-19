@@ -19,7 +19,10 @@ import {
   deleteHobby,
   addFavorites,
   getUserFavorites,
-  deleteFavorite
+  deleteFavorite,
+  uploadImages,
+  getUserImages,
+  deleteImage
 } from '../controllers/authController.js';
 
 import { 
@@ -54,5 +57,11 @@ router.route('/favorite').put(isAuthenticatedUser, addFavorites);
 router.route('/favorites')
   .get(isAuthenticatedUser, getUserFavorites)
   .delete(isAuthenticatedUser, deleteFavorite);
+
+router.route('/image').put(isAuthenticatedUser, uploadImages);
+
+router.route('/images')
+  .get(isAuthenticatedUser,getUserImages)
+  .delete(isAuthenticatedUser, deleteImage);
 
 export default router;

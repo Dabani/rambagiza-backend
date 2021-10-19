@@ -59,5 +59,8 @@
   "FAVORITE_EXISTS": "Cette combinaison préférée existe déjà !",
   "FAVORITE_CREATED": "Favori ajouté avec succès !",
   "FAVORITE_DELETED": "Favori supprimé avec succès !",
-  "GENDER_UNKNOWN": "Sexe non reconnu !"
+  "GENDER_UNKNOWN": "Sexe non reconnu !",
+  "IMAGE_EMPTY": "Il n'y a pas d'image à télécharger !",
+  "IMAGE_UPLOADED": "Image téléchargée avec succès !",
+  "IMAGE_DELETED": "Image supprimée !"
 }

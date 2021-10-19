@@ -59,5 +59,8 @@
   "FAVORITE_EXISTS": "Uru rusobe rw'ibyo ukunda rusanzwe ruhari !",
   "FAVORITE_CREATED": "Ibyo ukunda byemewe !",
   "FAVORITE_DELETED": "Ibyo ukunda byahanaguwe nta ngorane !",
-  "GENDER_UNKNOWN": "Wanditse igitsina kitazwi !"
+  "GENDER_UNKNOWN": "Wanditse igitsina kitazwi !",
+  "IMAGE_EMPTY": "Ntabwo wahisemo ishusho yo kohereza ku rubuga !",
+  "IMAGE_UPLOADED": "Ishusho yoherejwe ku rubuga nta ngorane !",
+  "IMAGE_DELETED": "Ishusho yahanaguwe ku rubuga !"
 }

@@ -17,6 +17,8 @@ import {
   isDate
 } from '../middlewares/validations.js'
 
+import { uploadImage } from '../utils/aws.js'
+
 const { createHash} = crypto
 const { v2 } = cloudinary
 
@@ -601,6 +603,65 @@ export const deleteFavorite = catchAsyncErrors(async (req, res, next) => {
   res.status(200).json({
     success: true,
     message: req.t('FAVORITE_DELETED')
+  })
+})
+
+// Images
+export const uploadImages = catchAsyncErrors(async (req, res, next) => {
+  try {
+    const { upload } = req.body
+    const newImage = {
+      user: req.user._id,
+      image: `https://rambagiza-online.s3.us-east-2.amazonaws.com/${ upload }`,
+      date: new Date(),
+      likes: [],
+      comments:[]
+    }
+
+    const iUser = await User.findById(req.user._id)
+
+    if (!upload || upload ==='') {
+    return next(new ErrorHandler(req.t('IMAGE_EMPTY'), 400))
+    }
+
+    iUser.images.push(newImage)
+
+    await iUser.save({ validateBeforeSave: false })
+
+    res.status(200).json({
+      success: true,
+      message: req.t('IMAGE_UPLOADED')
+    })
+  } catch (error) {
+    console.log(error)
+  }
+})
+
+export const getUserImages = catchAsyncErrors(async (req, res, next) => {
+  const user = await User.findById(req.query.id)
+
+  res.status(200).json({
+    success: true,
+    images: user.images
+  })
+})
+
+export const deleteImage = catchAsyncErrors(async (req, res, next) => {
+  const user = await User.findById(req.query.user)
+
+  const images = user.images.filter(image => image._id.toString() !== req.query.id.toString())
+
+  await User.findByIdAndUpdate(req.query.user, {
+    images
+  }, {
+    new: true,
+    runValidators: true,
+    useFindAndModify: false
+  })
+
+  res.status(200).json({
+    success: true,
+    message: req.t('IMAGE_DELETED')
   })
 })
 
