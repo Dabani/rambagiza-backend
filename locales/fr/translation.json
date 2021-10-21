@@ -68,6 +68,7 @@
   "FRIEND_REQUEST_NOT_FOUND": "Demande d'amitié introuvable pour approbation !",
   "FRIEND_ACCEPTED": "Demande d'amitié acceptée, vous êtes maintenant amis !",
   "FRIEND_REJECTED": "Demande d'amitié refusée !",
+  "FRIEND_REJECTION_FAILED": "Le rejet de la demande d'amitié a échoué ou la demande a été annulée !",
   "FRIEND_ALREADY": "Vous êtes déjà amis !",
   "FRIEND_REQUEST_SHOW": "Afficher la demande d'amitié !",
   "FRIEND_REQUEST_SHOW_FAIL": "Accès refusé ou la demande d'amitié a été annulée !"

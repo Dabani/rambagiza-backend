@@ -842,9 +842,9 @@ export const rejectFriend = catchAsyncErrors(async (req, res, next) => {
     await User.findById({ _id: req.user._id })
       .populate('friends.friend')
       .then((user) => {
-        user.friends.filter((friend) => {
-          if (friend._id === req.params.id) {
-            user.friends.pop(friend)
+        user.friends.filter((_friend) => {
+          if (_friend.friend._id.toString() === req.params.id) {
+            user.friends.pop(_friend)
             user.save()
               .then(() => {
                 User.findOne({ _id: req.params.id })

@@ -68,6 +68,7 @@
   "FRIEND_REQUEST_NOT_FOUND": "Ubucuti wasabwe ntibushoboye kuboneka kugira ngo ubwemeze !",
   "FRIEND_ACCEPTED": "Wemeje ubucuti wasabwe, ubu muri incuti !",
   "FRIEND_REJECTED": "Ubucuti wasabwe wabuhakanye !",
+  "FRIEND_REJECTION_FAILED": "Guhakana ubucuti byanze cyangwa ubusabe bwarahanaguwe !",
   "FRIEND_ALREADY": "Uyu muntu musanzwe muri incuti !",
   "FRIEND_REQUEST_SHOW": "Fungura ubucuti wasabwe !",
   "FRIEND_REQUEST_SHOW_FAIL": "Ntiwemerewe icyo gikorwa cyangwa ubusabe bw'ubucuti bwarahagaritswe !"

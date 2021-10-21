@@ -68,6 +68,7 @@
   "FRIEND_REQUEST_NOT_FOUND": "Friend request not found for approval!",
   "FRIEND_ACCEPTED": "Friend request accepted, you are now friends!",
   "FRIEND_REJECTED": "Friend request rejected!",
+  "FRIEND_REJECTION_FAILED": "Friend request rejection failed or request has been cancelled!",
   "FRIEND_ALREADY": "You are already friends!",
   "FRIEND_REQUEST_SHOW": "Show friend request!",
   "FRIEND_REQUEST_SHOW_FAIL": "Access denied or friend request moved!"
