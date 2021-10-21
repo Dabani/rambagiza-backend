@@ -62,5 +62,13 @@
   "GENDER_UNKNOWN": "Wanditse igitsina kitazwi !",
   "IMAGE_EMPTY": "Ntabwo wahisemo ishusho yo kohereza ku rubuga !",
   "IMAGE_UPLOADED": "Ishusho yoherejwe ku rubuga nta ngorane !",
-  "IMAGE_DELETED": "Ishusho yahanaguwe ku rubuga !"
+  "IMAGE_DELETED": "Ishusho yahanaguwe ku rubuga !",
+  "FRIEND_REQUEST_SENT": "Gusaba ubucuti byoherejwe nta ngorane !",
+  "FRIEND_REQUEST_ALREADY": "Uyu muntu usanzwe waramusabye kuba incuti !",
+  "FRIEND_REQUEST_NOT_FOUND": "Ubucuti wasabwe ntibushoboye kuboneka kugira ngo ubwemeze !",
+  "FRIEND_ACCEPTED": "Wemeje ubucuti wasabwe, ubu muri incuti !",
+  "FRIEND_REJECTED": "Ubucuti wasabwe wabuhakanye !",
+  "FRIEND_ALREADY": "Uyu muntu musanzwe muri incuti !",
+  "FRIEND_REQUEST_SHOW": "Fungura ubucuti wasabwe !",
+  "FRIEND_REQUEST_SHOW_FAIL": "Ntiwemerewe icyo gikorwa cyangwa ubusabe bw'ubucuti bwarahagaritswe !"
 }

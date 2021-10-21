@@ -62,5 +62,13 @@
   "GENDER_UNKNOWN": "Sexe non reconnu !",
   "IMAGE_EMPTY": "Il n'y a pas d'image à télécharger !",
   "IMAGE_UPLOADED": "Image téléchargée avec succès !",
-  "IMAGE_DELETED": "Image supprimée !"
+  "IMAGE_DELETED": "Image supprimée !",
+  "FRIEND_REQUEST_SENT": "Demande d'amitié envoyée avec succès !",
+  "FRIEND_REQUEST_ALREADY": "Vous avez déjà envoyé une demande à cette personne !",
+  "FRIEND_REQUEST_NOT_FOUND": "Demande d'amitié introuvable pour approbation !",
+  "FRIEND_ACCEPTED": "Demande d'amitié acceptée, vous êtes maintenant amis !",
+  "FRIEND_REJECTED": "Demande d'amitié refusée !",
+  "FRIEND_ALREADY": "Vous êtes déjà amis !",
+  "FRIEND_REQUEST_SHOW": "Afficher la demande d'amitié !",
+  "FRIEND_REQUEST_SHOW_FAIL": "Accès refusé ou la demande d'amitié a été annulée !"
 }

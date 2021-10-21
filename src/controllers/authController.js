@@ -9,17 +9,18 @@ import sendEmail from '../utils/sendEmail.js'
 
 import crypto from 'crypto'
 import cloudinary from 'cloudinary'
-import { 
+import {
   passwordStrength,
-  validEmail, 
-  validString, 
-  onlyLetters, 
+  validEmail,
+  validString,
+  onlyLetters,
   isDate
 } from '../middlewares/validations.js'
 
 import { uploadImage } from '../utils/aws.js'
+import { read } from 'fs'
 
-const { createHash} = crypto
+const { createHash } = crypto
 const { v2 } = cloudinary
 
 export const registerUser = catchAsyncErrors(async (req, res, next) => {
@@ -29,7 +30,7 @@ export const registerUser = catchAsyncErrors(async (req, res, next) => {
     width: 150,
     crop: 'scale'
   })
- */  
+ */
 
   const { username, email, password, confirmPassword } = req.body
   /* 
@@ -57,9 +58,9 @@ export const registerUser = catchAsyncErrors(async (req, res, next) => {
 
   try {
     const uName = await User.findOne({ username })
-    if (uName) {      
+    if (uName) {
       return next(new ErrorHandler(req.t('USER_NAME_IN_USE'), 400))
-    }    
+    }
   } catch (error) {
     console.log(error)
   }
@@ -71,10 +72,10 @@ export const registerUser = catchAsyncErrors(async (req, res, next) => {
 
   try {
     const uEmail = await User.findOne({ email })
-    
+
     if (uEmail) {
       return next(new ErrorHandler(req.t('EMAIL_IN_USE'), 400))
-    }    
+    }
   } catch (error) {
     console.log(error)
   }
@@ -103,7 +104,7 @@ export const registerUser = catchAsyncErrors(async (req, res, next) => {
     username,
     email,
     password
-  })  
+  })
 
   sendToken(user, 200, res)
 
@@ -152,20 +153,20 @@ export const forgotPassword = catchAsyncErrors(async (req, res, next) => {
   /* const resetUrl = `${req.protocol}://${req.get('host')}/api/v1/password/reset/${resetToken}` */
   const resetUrl = `${ process.env.FRONTEND_URL }/password/reset/${ resetToken }`
 
-  const message = `${ req.t('PASSWORD_RESET_TOKEN') }\n\n${ resetUrl }\n\n${ req.t('REQUEST_IGNORE')}`
+  const message = `${ req.t('PASSWORD_RESET_TOKEN') }\n\n${ resetUrl }\n\n${ req.t('REQUEST_IGNORE') }`
 
   try {
 
     await sendEmail({
       email: user.email,
-      subject: `${ req.t('PASSWORD_RECOVERY')}`,
+      subject: `${ req.t('PASSWORD_RECOVERY') }`,
       message
     })
 
     res.status(200).json({
       success: true,
       title: req.t('EMAIL_PASSWORD_RECOVERY'),
-      message: `${ req.t('EMAIL_SENT_TO')} ${ user.email }`
+      message: `${ req.t('EMAIL_SENT_TO') } ${ user.email }`
     })
 
   } catch (error) {
@@ -271,7 +272,7 @@ export const updateProfile = catchAsyncErrors(async (req, res, next) => {
   try {
     const user = await User.findById(req.user.id)
 
-    if (!req.body.username || req.body.username ==='') {
+    if (!req.body.username || req.body.username === '') {
       user.username = req.user.username
     } else if (req.user.username !== req.body.username) {
       return next(new ErrorHandler(req.t('USERNAME_READ_ONLY'), 400))
@@ -326,35 +327,35 @@ export const updateProfile = catchAsyncErrors(async (req, res, next) => {
     if (Object.values(Genders).indexOf(req.body.gender) === -1) {
       return next(new ErrorHandler(req.t('GENDER_UNKNOWN'), 400))
     }
-    
+
   } catch (error) {
     console.log(error)
   }
 
   newUserData.location = {
-    country: req.body.location.country, 
+    country: req.body.location.country,
     city: req.body.location.city,
     state: req.body.location.state
   }
 
   // Update avatar
   if (req.body.avatar !== '') {
-/*
-    const user = await User.findById(req.user.id)
-
-    const image_id = user.avatar.public_id
-    const res = await v2.uploader.destroy(image_id)
-
-    const result = await v2.uploader.upload(req.body.avatar, {
-      folder: 'avatars',
-      width: 150,
-      crop: 'scale'
-    })
-    newUserData.avatar = {
-      public_id: result.public_id,
-      url: result.secure_url
-    }
- */
+    /*
+        const user = await User.findById(req.user.id)
+    
+        const image_id = user.avatar.public_id
+        const res = await v2.uploader.destroy(image_id)
+    
+        const result = await v2.uploader.upload(req.body.avatar, {
+          folder: 'avatars',
+          width: 150,
+          crop: 'scale'
+        })
+        newUserData.avatar = {
+          public_id: result.public_id,
+          url: result.secure_url
+        }
+     */
     newUserData.avatar = {
       public_id: req.body.avatar.public_id
     }
@@ -408,7 +409,7 @@ export const getUserDetails = catchAsyncErrors(async (req, res, next) => {
   const user = await User.findById(req.params.id)
 
   if (!user) {
-    return next(new ErrorHandler(`${ req.t('USER_NOT_FOUND_ID')} ${ req.params.id }`))
+    return next(new ErrorHandler(`${ req.t('USER_NOT_FOUND_ID') } ${ req.params.id }`))
   }
 
   res.status(200).json({
@@ -443,7 +444,7 @@ export const deleteUser = catchAsyncErrors(async (req, res, next) => {
   const user = await User.findById(req.params.id)
 
   if (!user) {
-    return next(new ErrorHandler(`${req.t('USER_NOT_FOUND_ID')} ${ req.params.id }`))
+    return next(new ErrorHandler(`${ req.t('USER_NOT_FOUND_ID') } ${ req.params.id }`))
   }
 
   // Remove avatar from cloudinary - TODO
@@ -616,13 +617,13 @@ export const uploadImages = catchAsyncErrors(async (req, res, next) => {
       date: new Date(),
       likes: [],
       allowComments,
-      comments:[]
+      comments: []
     }
 
     const iUser = await User.findById(req.user._id)
 
-    if (!upload || upload ==='') {
-    return next(new ErrorHandler(req.t('IMAGE_EMPTY'), 400))
+    if (!upload || upload === '') {
+      return next(new ErrorHandler(req.t('IMAGE_EMPTY'), 400))
     }
 
     iUser.images.push(newImage)
@@ -674,7 +675,7 @@ export const addLikes = catchAsyncErrors(async (req, res, next) => {
       date: new Date()
     }
 
-    const lUser = await User.findById({_id: req.params.id})
+    const lUser = await User.findById({ _id: req.params.id })
 
     // check if like user already exists
     if (lUser.likes.some(l => l.likeUser === req.user._id)) {
@@ -682,7 +683,7 @@ export const addLikes = catchAsyncErrors(async (req, res, next) => {
     } else {
       lUser.likes.push(like)
     }
-    
+
     await lUser.save({ validateBeforeSave: false })
 
     res.status(200).json({
@@ -702,7 +703,168 @@ export const getUserLikes = catchAsyncErrors(async (req, res, next) => {
       success: true,
       userLikes: user.likes,
       numLikes: user.likes.length
-    })    
+    })
+  } catch (error) {
+    console.log(error)
+  }
+})
+
+/**
+ * Friend Request Process
+ * ======================
+ */
+
+// Send friend request => /sendFriendRequest/:id (get)
+export const sendFriendRequest = catchAsyncErrors(async (req, res, next) => {
+
+  try {
+    const newFriend = {
+      friend: req.user._id
+    }
+
+    const friendUser = await User.findOne({ _id: req.params.id })
+    
+    // Check if friend already exists
+    if (friendUser.friends.some(f => f.friend.toString() === req.user._id.toString())) {
+      return next(new ErrorHandler(req.t('FRIEND_REQUEST_ALREADY'), 400))
+    } else {
+      friendUser.friends.push(newFriend)
+    }
+    
+    await friendUser.save({ validateBeforeSave: false })
+
+    res.status(200).json({
+      success: true,
+      title: req.t('FRIEND_REQUEST_SENT'),
+      message: req.t('FRIEND_REQUEST_SENT')
+    })
+
+  } catch (error) {
+    console.log(error)
+  }
+})
+
+// Show friend request => /showFriendRequest/:id (get)
+export const showFriendRequest = catchAsyncErrors(async (req, res, next) => {
+  try {
+    const newFriend = await User.findOne({ _id: req.params.id })
+    
+    res.status(201).json({
+      success: true,
+      title: req.t('FRIEND_REQUEST_SHOW'),
+      newFriend
+    })
+    
+  } catch (error) {
+    console.log(error)
+  }
+})
+
+// Accept friend request => /acceptFriend/:id (get)
+export const acceptFriend = catchAsyncErrors(async (req, res, next) => {
+  try {
+    await User.findById({ _id: req.user._id })
+      .populate('friends.friend')
+      .then((user) => {
+        user.friends.filter((f) => {
+
+          if (f.friend._id.toString() === req.params.id) {
+            if (f.isFriend === true) {
+              return next(new ErrorHandler(req.t('FRIEND_ALREADY'), 400))
+            } else {
+              f.isFriend = true,
+                f.date = new Date()
+              user.save({ validateBeforeSave: false })
+                .then(() => {
+                  User.findById({ _id: req.params.id })
+                    .then((requestSender) => {
+                      let newFriend = {
+                        friend: req.user._id,
+                        isFriend: true,
+                        date: new Date()
+                      }
+                      requestSender.friends.push(newFriend)
+                      requestSender.save()
+                        .then(() => {
+                          User.findById({ _id: req.user._id }, { wallet: 0, role: 0 })
+                            .populate('friends.friend', { wallet: 0, role: 0 })
+                            .sort({ date: 'desc' })
+                            .then((user) => {
+                              res.status(200).json({
+                                success: true,
+                                title: req.t('FRIEND_ACCEPTED'),
+                                user
+                              })
+                            })
+                        })
+                    })
+                }).catch((error) => {
+                  console.log(error)
+                })
+            }
+          } else {
+            res.status(404).json({
+              success: false,
+              title: req.t('FRIEND_REQUEST_NOT_FOUND'),
+              message: req.t('FRIEND_REQUEST_NOT_FOUND')
+            })
+          }
+        })
+      }).catch((error) => {
+        console.log(error)
+      })
+  } catch (error) {
+    console.log(error)
+  }
+})
+
+// Get only friends  => /friends (get)
+export const getFriends = catchAsyncErrors(async (req, res, next) => {
+  try {
+    await User.findById({ _id: req.user._id })
+      .populate('friends.friend')
+      .then((user) => {
+        res.status(200).json({
+          success: true,
+          title: req.t('FRIEND_MINE'),
+          userFriends: user
+        })
+      })
+  } catch (error) {
+    console.log(error)
+  }
+})
+
+// Reject friend request => /rejectFriend/:id (get)
+
+export const rejectFriend = catchAsyncErrors(async (req, res, next) => {
+  try {
+    await User.findById({ _id: req.user._id })
+      .populate('friends.friend')
+      .then((user) => {
+        user.friends.filter((friend) => {
+          if (friend._id === req.params.id) {
+            user.friends.pop(friend)
+            user.save()
+              .then(() => {
+                User.findOne({ _id: req.params.id })
+                  .then((friend) => {
+                    res.status(200).json({
+                      success: true,
+                      title: req.t('FRIEND_REJECTED'),
+                      friend
+                    })
+                  })
+              })
+          } else {
+            res.status(404).json({
+              success: false,
+              title: req.t('FRIEND_REJECTION_FAILED'),
+              message: req.t('FRIEND_REJECTION_FAILED')
+            })
+          }
+        })
+      })
   } catch (error) {
     console.log(error)
   }

@@ -213,13 +213,18 @@ const userSchema = new Schema({
   friends: [
     {
       friend: {
-        type: Schema.ObjectId,
+        type: Schema.Types.ObjectId,
         ref: 'User',
+        required: true,
         unique: true
       },
       isFriend: {
         type: Boolean,
         default: false
+      },
+      date: {
+        type: Date,
+        default: Date.now
       }
     }
   ],

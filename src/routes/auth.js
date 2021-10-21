@@ -24,7 +24,12 @@ import {
   getUserImages,
   deleteImage,
   addLikes,
-  getUserLikes
+  getUserLikes,
+  sendFriendRequest,
+  showFriendRequest,
+  acceptFriend,
+  getFriends,
+  rejectFriend
 } from '../controllers/authController.js';
 
 import { 
@@ -63,11 +68,18 @@ router.route('/favorites')
 router.route('/image').put(isAuthenticatedUser, uploadImages);
 
 router.route('/images')
-  .get(isAuthenticatedUser,getUserImages)
+  .get(isAuthenticatedUser, getUserImages)
   .delete(isAuthenticatedUser, deleteImage);
 
 router.route('/userLike/:id').put(isAuthenticatedUser, addLikes);
 router.route('/likes')
   .get(isAuthenticatedUser, getUserLikes);
+
+// Friend request process
+router.route('/sendFriendRequest/:id').get(isAuthenticatedUser, sendFriendRequest)
+router.route('/showFriendRequest/:id').get(isAuthenticatedUser, showFriendRequest)
+router.route('/acceptFriend/:id').get(isAuthenticatedUser, acceptFriend)
+router.route('/friends').get(isAuthenticatedUser, getFriends)
+router.route('/rejectFriend/:id').get(isAuthenticatedUser, rejectFriend)
 
 export default router;
